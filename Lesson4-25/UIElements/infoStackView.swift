@@ -24,6 +24,4 @@ class InfoStackView: UIStackView {
         axis = .vertical
         spacing = 16
     }
-    
-
 }
