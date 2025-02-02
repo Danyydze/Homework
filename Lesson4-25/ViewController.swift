@@ -16,51 +16,59 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - Data
     private let userInfo = userInfoData
     private let familyMembers = familyMembersData
+    private let profileImageView = UIImageView()
+    private let mainInfoLabel = UILabel()
+    private let subInfoLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = UIColor(named: "ViewColor")
         setupUserInfoTableView()
         setupFamilyInfoTableView()
+        setupInfoStackView()
         
         userInfoTableView.isUserInteractionEnabled = false
         familyInfoTableView.isUserInteractionEnabled = false
     }
 
     // MARK: - Setup Methods
-    private lazy var mainInfoLabel: (String, CGFloat) -> UILabel = { content, size in
-        let label = UILabel()
-        label.font = .systemFont(ofSize: size, weight: .medium)
-        label.text = content
-        return label
-    }
-    
-    private lazy var subInfoLabel: (String) -> UILabel = {content in
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16)
-        label.textColor = .gray
-        return label
+    private func setupInfoStackView() {
+        let infoStackView = InfoStackView()
+        let horizontalStack = UIStackView()
+        horizontalStack.axis = .horizontal
+        horizontalStack.spacing = 100
         
-    }
-    
-    private lazy var profilePie: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "person.circle.fill"))
+        mainInfoLabel.text = "John Dolbik"
+        mainInfoLabel.textColor = .black
+        mainInfoLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 25
-        imageView.clipsToBounds = true
+        subInfoLabel.text = "01.01.1970"
+        subInfoLabel.font = UIFont.systemFont(ofSize: 17)
+        subInfoLabel.textColor = .gray
         
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        infoStackView.addArrangedSubview(mainInfoLabel)
+        infoStackView.addArrangedSubview(subInfoLabel);
+        
+        profileImageView.image = UIImage(systemName: "person.circle.fill")
+        profileImageView.tintColor = .white
+        profileImageView.contentMode = .scaleAspectFit
+        profileImageView.clipsToBounds = true
+        profileImageView.layer.cornerRadius = 15
+        
+        horizontalStack.addArrangedSubview(infoStackView)
+        horizontalStack.addArrangedSubview(profileImageView)
+        
+        view.addSubview(horizontalStack)
+        
+        horizontalStack.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalToConstant: 50),
-            imageView.heightAnchor.constraint(equalToConstant: 50)
+            horizontalStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            horizontalStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
+            horizontalStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
+            horizontalStack.heightAnchor.constraint(equalToConstant: 50)
         ])
-        
-        return imageView
-    }()
-    
-    
-
+    }
     
     private func setupUserInfoTableView() {
         userInfoTableView.dataSource = self
@@ -126,12 +134,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             
             let roleLabel = UILabel()
             roleLabel.text = member.role
-            roleLabel.font = .systemFont(ofSize: 22, weight: .bold)
+            roleLabel.font = .systemFont(ofSize: 17, weight: .bold)
             roleLabel.translatesAutoresizingMaskIntoConstraints = false
 
             let nameAndBirthLabel = UILabel()
             nameAndBirthLabel.text = "\(member.name), \(member.birthDate)"
-            nameAndBirthLabel.font = .systemFont(ofSize: 18, weight: .regular)
+            nameAndBirthLabel.font = .systemFont(ofSize: 23, weight: .regular)
             nameAndBirthLabel.translatesAutoresizingMaskIntoConstraints = false
             
             let stackView = UIStackView(arrangedSubviews: [roleLabel, nameAndBirthLabel])
@@ -152,12 +160,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
             let roleLabel = UILabel()
             roleLabel.text = member.title
-            roleLabel.font = .systemFont(ofSize: 22, weight: .bold)
+            roleLabel.font = .systemFont(ofSize: 17, weight: .bold)
             roleLabel.translatesAutoresizingMaskIntoConstraints = false
 
             let nameAndBirthLabel = UILabel()
             nameAndBirthLabel.text = "\(member.value)"
-            nameAndBirthLabel.font = .systemFont(ofSize: 18, weight: .regular)
+            nameAndBirthLabel.font = .systemFont(ofSize: 23, weight: .regular)
             nameAndBirthLabel.translatesAutoresizingMaskIntoConstraints = false
             
             let stackView = UIStackView(arrangedSubviews: [roleLabel, nameAndBirthLabel])
@@ -209,11 +217,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: - Heading label
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
-        headerView.backgroundColor = .lightGray
+        headerView.backgroundColor = .clear
 
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.textColor = .white
+        titleLabel.textColor = .gray
         titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
