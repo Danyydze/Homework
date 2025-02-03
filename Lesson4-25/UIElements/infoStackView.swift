@@ -22,8 +22,6 @@ class InfoStackView: UIStackView {
     
     private func setupStackView() {
         axis = .vertical
-        spacing = 16
+        spacing = 5
     }
-    
-
 }
